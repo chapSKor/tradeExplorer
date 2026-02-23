@@ -29,7 +29,13 @@ library(Rtsne)       # t-SNE
 library(uwot)        # UMAP
 
 # ---------- Helpers ----------
-
+app_dir <- function() {
+  # Most reliable in Shiny contexts
+  d <- shiny::getShinyOption("appDir")
+  if (!is.null(d)) return(d)
+  # Fallback
+  getwd()
+}
 # ---- Comparison helpers ----
 
 safe_num <- function(x) x[is.finite(x) & !is.na(x)]
@@ -485,13 +491,15 @@ server <- function(input, output, session) {
   
   # Populate dropdown with CSVs from working directory
   observe({
-    csvs <- list.files(getwd(), pattern = "\\.csv$", full.names = FALSE)
+    #csvs <- list.files(getwd(), pattern = "\\.csv$", full.names = FALSE)
+    csvs <- list.files(file.path(app_dir(), "data"), pattern = "\\.csv$", full.names = FALSE)
     sel  <- if (length(csvs) > 0) csvs[1] else character(0)
     updateSelectInput(session, "file_local", choices = csvs, selected = sel)
   })
   
   observeEvent(input$refresh_files, {
-    csvs <- list.files(getwd(), pattern = "\\.csv$", full.names = FALSE)
+    #csvs <- list.files(getwd(), pattern = "\\.csv$", full.names = FALSE)
+    csvs <- list.files(file.path(app_dir(), "data"), pattern = "\\.csv$", full.names = FALSE)
     sel  <- if (length(csvs) > 0) csvs[1] else character(0)
     updateSelectInput(session, "file_local", choices = csvs, selected = sel)
   })
@@ -499,8 +507,11 @@ server <- function(input, output, session) {
   # Load selected CSV
   observeEvent(input$file_local, {
     req(input$file_local)
-    if (!file.exists(input$file_local)) return()
-    df <- load_trade_data(input$file_local)
+    #if (!file.exists(input$file_local)) return()
+    #df <- load_trade_data(input$file_local)
+    csv_path <- file.path(app_dir(), "data", input$file_local)
+    if (!file.exists(csv_path)) return()
+    df <- load_trade_data(csv_path)
     raw_data(df)
     embedding_store(NULL)
   }, ignoreInit = FALSE)
