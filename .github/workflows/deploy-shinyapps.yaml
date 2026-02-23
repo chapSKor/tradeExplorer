@@ -1,0 +1,40 @@
+name: Deploy to shinyapps.io
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Install system deps (common for R packages)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
+
+      - name: Install renv
+        run: Rscript -e 'install.packages("renv")'
+
+      - name: Restore R packages
+        run: Rscript -e 'renv::restore(prompt = FALSE)'
+
+      - name: Install rsconnect
+        run: Rscript -e 'install.packages("rsconnect")'
+
+      - name: Deploy to shinyapps.io
+        env:
+          SHINYAPPS_NAME: ${{ secrets.SHINYAPPS_NAME }}
+          SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
+          SHINYAPPS_SECRET: ${{ secrets.SHINYAPPS_SECRET }}
+        run: |
+          Rscript -e 'rsconnect::setAccountInfo(name=Sys.getenv("SHINYAPPS_NAME"), token=Sys.getenv("SHINYAPPS_TOKEN"), secret=Sys.getenv("SHINYAPPS_SECRET"))'
+          Rscript -e 'rsconnect::deployApp(appDir=".", appName="tradeExplorer", forceUpdate=TRUE)'
