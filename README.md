@@ -1,5 +1,9 @@
 # PharmaTrace
 
+---
+
+# PharmaTrace
+
 **PharmaTrace** is an interactive R Shiny application for exploring, visualizing, comparing, clustering, and forecasting Canadian pharmaceutical trade flows.
 
 The application was developed to support exploratory analysis of Canadian pharmaceutical supply chains, with emphasis on pharmaceutical imports and exports across provinces, origin/destination countries, U.S. states, commodity classes, units of measurement, trade value, and quantity.
@@ -8,7 +12,31 @@ PharmaTrace is designed as both a research tool and a decision-support dashboard
 
 ---
 
-## Current Application Structure
+## 🚀 Live Features
+
+- 📊 Interactive trade value histograms
+- 🗺️ Geographic heatmaps (Canada & U.S.)
+- ⚖️ Distributional comparison metrics
+- 📈 Custom trend plots
+- 🔮 Forecasting (ARIMA, RF, factor models)
+- 🧠 UMAP / t-SNE clustering of trade structure
+
+---
+
+## 📦 Data Coverage
+
+| Dataset  | Resolution | Time Range        |
+|----------|------------|------------------|
+| Imports  | Annual     | 1988–2025        |
+| Exports  | Monthly    | 2000–2026        |
+
+---
+
+## 🧪 Quick Start
+
+```r
+setwd("path/to/PharmaTrace")
+shiny::runApp()
 
 PharmaTrace is organized into two main dashboard tabs:
 
