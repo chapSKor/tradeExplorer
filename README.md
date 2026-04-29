@@ -1,9 +1,6 @@
 # PharmaTrace
 
 ---
-
-# PharmaTrace
-
 **PharmaTrace** is an interactive R Shiny application for exploring, visualizing, comparing, clustering, and forecasting Canadian pharmaceutical trade flows.
 
 The application was developed to support exploratory analysis of Canadian pharmaceutical supply chains, with emphasis on pharmaceutical imports and exports across provinces, origin/destination countries, U.S. states, commodity classes, units of measurement, trade value, and quantity.
